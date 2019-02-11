@@ -1,0 +1,46 @@
+{
+  "name": "Miniatures",
+  "version": "1.0.0",
+  "description": "Bachelor's Thesis Miniatures installation.",
+  "main": "index.js",
+  "scripts": {
+    "development": "NODE_ENV=development webpack-dev-server --mode=development --hot",
+    "production": "webpack --mode=production"
+  },
+  "repository": "https://github.com/ImLuze/BAP_Miniatures.git",
+  "author": "Luïs De Zutter <luzedz@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.1.5",
+    "babel-loader": "8.0.4",
+    "babel-plugin-styled-components": "1.9.2",
+    "clean-webpack-plugin": "1.0.0",
+    "css-loader": "1.0.1",
+    "eslint": "5.9.0",
+    "eslint-config-prettier": "3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-react": "7.11.1",
+    "file-loader": "2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "4.5.0",
+    "mini-css-extract-plugin": "0.4.5",
+    "prettier": "1.15.2",
+    "react": "16.7.0-alpha.0",
+    "react-dom": "16.7.0-alpha.0",
+    "style-loader": "0.23.1",
+    "styled-components": "4.1.2",
+    "webfontloader": "^1.6.28",
+    "webp-loader": "^0.4.0",
+    "webpack": "4.26.1",
+    "webpack-cli": "3.1.2",
+    "webpack-dev-server": "3.1.10",
+    "webpack-md5-hash": "^0.0.6"
+  },
+  "dependencies": {
+    "react-router-dom": "^4.3.1"
+  }
+}
