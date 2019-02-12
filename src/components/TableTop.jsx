@@ -7,7 +7,6 @@ const Container = styled.section`
   height: 100vh;
   background-size: cover;
   overflow: hidden;
-  transform-origin: 0 0;
   display: block;
   position: absolute;
 `;
@@ -20,6 +19,11 @@ const getPointFromTouch = (touch, element) => {
   };
 };
 
+const getMidpoint = (pointA, pointB) => ({
+  x: (pointA.x + pointB.x) / 2,
+  y: (pointA.y + pointB.y) / 2
+});
+
 const getDistanceBetweenPoints = (pointA, pointB) =>
   Math.sqrt(
     Math.pow(pointA.y - pointB.y, 2) + Math.pow(pointA.x - pointB.x, 2)
@@ -29,6 +33,7 @@ const TableTop = () => {
   const [scale, setScale] = useState(1);
   const [prevScale, setPrevScale] = useState(1);
   const [initDistance, setInitDistance] = useState(0);
+  const [midpoint, setMidpoint] = useState({ x: 0, y: 0 });
   const container = useRef(null);
 
   const handleTouchStart = e => {
@@ -36,6 +41,12 @@ const TableTop = () => {
       const pointA = getPointFromTouch(e.touches[0], container.current);
       const pointB = getPointFromTouch(e.touches[1], container.current);
       setInitDistance(getDistanceBetweenPoints(pointA, pointB));
+      setMidpoint(getMidpoint(pointA, pointB));
+
+      console.log({
+        x: midpoint.x / screen.width,
+        y: midpoint.y / screen.height
+      });
     }
   };
 
@@ -45,7 +56,7 @@ const TableTop = () => {
       const pointA = getPointFromTouch(e.touches[0], container.current);
       const pointB = getPointFromTouch(e.touches[1], container.current);
       const distance = getDistanceBetweenPoints(pointA, pointB);
-      setScale(prevScale + (distance - initDistance) / 100);
+
       if (prevScale + (distance - initDistance) / 100 > 1) {
         setScale(prevScale + (distance - initDistance) / 100);
       } else setScale(1);
@@ -64,7 +75,8 @@ const TableTop = () => {
       onTouchEnd={handleTouchEnd}
       style={{
         backgroundImage: `url(${bg})`,
-        transform: `scale(${scale})`
+        transform: `scale(${scale})`,
+        transformOrigin: midpoint.x + 'px ' + midpoint.y + 'px'
       }}
     />
   );
