@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import bg from '../assets/img/bg.jpg';
+import miniature from '../assets/img/miniature.jpg';
 
 const Container = styled.section`
   width: 100vw;
@@ -11,11 +12,19 @@ const Container = styled.section`
   position: absolute;
 `;
 
-const getPointFromTouch = (touch, element) => {
+const Miniature = styled.img`
+  width: 20rem;
+  height: 23rem;
+  transform: rotate(17deg);
+  margin-left: 7rem;
+  margin-top: 7rem;
+`;
+
+const getPointFromTouch = (touch, element, _scale) => {
   const rect = element.getBoundingClientRect();
   return {
-    x: touch.clientX - rect.left,
-    y: touch.clientY - rect.top
+    x: (touch.clientX - rect.left) / _scale,
+    y: (touch.clientY - rect.top) / _scale
   };
 };
 
@@ -34,27 +43,22 @@ const TableTop = () => {
   const [prevScale, setPrevScale] = useState(1);
   const [initDistance, setInitDistance] = useState(0);
   const [midpoint, setMidpoint] = useState({ x: 0, y: 0 });
-  const container = useRef(null);
+  const ref = useRef(null);
 
   const handleTouchStart = e => {
     if (e.touches.length == 2) {
-      const pointA = getPointFromTouch(e.touches[0], container.current);
-      const pointB = getPointFromTouch(e.touches[1], container.current);
+      const pointA = getPointFromTouch(e.touches[0], ref.current, scale);
+      const pointB = getPointFromTouch(e.touches[1], ref.current, scale);
       setInitDistance(getDistanceBetweenPoints(pointA, pointB));
       setMidpoint(getMidpoint(pointA, pointB));
-
-      console.log({
-        x: midpoint.x / screen.width,
-        y: midpoint.y / screen.height
-      });
     }
   };
 
   const handleTouchMove = e => {
     if (e.touches.length == 2) {
       e.preventDefault();
-      const pointA = getPointFromTouch(e.touches[0], container.current);
-      const pointB = getPointFromTouch(e.touches[1], container.current);
+      const pointA = getPointFromTouch(e.touches[0], ref.current, prevScale);
+      const pointB = getPointFromTouch(e.touches[1], ref.current, prevScale);
       const distance = getDistanceBetweenPoints(pointA, pointB);
 
       if (prevScale + (distance - initDistance) / 100 > 1) {
@@ -69,7 +73,7 @@ const TableTop = () => {
 
   return (
     <Container
-      ref={container}
+      ref={ref}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -78,7 +82,9 @@ const TableTop = () => {
         transform: `scale(${scale})`,
         transformOrigin: midpoint.x + 'px ' + midpoint.y + 'px'
       }}
-    />
+    >
+      <Miniature src={miniature} />
+    </Container>
   );
 };
 
