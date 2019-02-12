@@ -27,14 +27,15 @@ const getDistanceBetweenPoints = (pointA, pointB) =>
 
 const TableTop = () => {
   const [scale, setScale] = useState(1);
+  const [prevScale, setPrevScale] = useState(1);
+  const [initDistance, setInitDistance] = useState(0);
   const container = useRef(null);
-  let initialDistance, newScale;
 
   const handleTouchStart = e => {
     if (e.touches.length == 2) {
       const pointA = getPointFromTouch(e.touches[0], container.current);
       const pointB = getPointFromTouch(e.touches[1], container.current);
-      initialDistance = getDistanceBetweenPoints(pointA, pointB);
+      setInitDistance(getDistanceBetweenPoints(pointA, pointB));
     }
   };
 
@@ -44,12 +45,15 @@ const TableTop = () => {
       const pointA = getPointFromTouch(e.touches[0], container.current);
       const pointB = getPointFromTouch(e.touches[1], container.current);
       const distance = getDistanceBetweenPoints(pointA, pointB);
-      newScale = scale + (distance - initialDistance) / 100;
+      setScale(prevScale + (distance - initDistance) / 100);
+      if (prevScale + (distance - initDistance) / 100 > 1) {
+        setScale(prevScale + (distance - initDistance) / 100);
+      } else setScale(1);
     }
   };
 
   const handleTouchEnd = () => {
-    if (newScale) setScale(newScale);
+    if (scale) setPrevScale(scale);
   };
 
   return (
