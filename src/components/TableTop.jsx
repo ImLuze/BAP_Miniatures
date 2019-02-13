@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import TableObject from './TableObject.jsx';
 import bg from '../assets/img/bg.jpg';
 import miniature from '../assets/img/miniature.jpg';
+import feather from '../assets/svg/feather.svg';
 
 const Container = styled.section`
   width: 100vw;
@@ -61,8 +63,8 @@ const TableTop = () => {
       const pointB = getPointFromTouch(e.touches[1], ref.current, prevScale);
       const distance = getDistanceBetweenPoints(pointA, pointB);
 
-      if (prevScale + (distance - initDistance) / 100 > 1) {
-        setScale(prevScale + (distance - initDistance) / 100);
+      if (prevScale + (distance - initDistance) / (100 / prevScale) > 1) {
+        setScale(prevScale + (distance - initDistance) / (100 / prevScale));
       } else setScale(1);
     }
   };
@@ -84,6 +86,7 @@ const TableTop = () => {
       }}
     >
       <Miniature src={miniature} />
+      <TableObject image={feather} scale={scale} />
     </Container>
   );
 };
